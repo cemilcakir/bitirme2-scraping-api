@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/search', SearchRoutes);
-app.use('/api/site', SiteRoutes);
+app.use('/api/sites', SiteRoutes);
 app.use('/api/auth', AuthRoutes);
 
 app.use((req, res, next) => {

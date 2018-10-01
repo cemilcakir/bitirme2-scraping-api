@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const siteSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    url: { type: String, required: true },
-    searchRoute: { type: Number, required: true }
+    name: { type: String, required: true},
+    baseUrl: { type: String, required: true },
+    searchRoute: { type: String, required: true }
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model('Site', siteSchema);
