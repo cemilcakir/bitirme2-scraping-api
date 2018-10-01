@@ -5,7 +5,9 @@ const bodyParder = require('body-parser');
 const mongoose = require('mongoose');
 const SearchRoutes = require('./Routes/SearchRoutes');
 const SiteRoutes = require('./Routes/SiteRoutes');
+const AuthRoutes = require('./Routes/AuthRoutes');
 
+mongoose.set('useCreateIndex', true);
 mongoose.connect("mongodb://root:root@localhost:27017/admin", { useNewUrlParser: true }, function (err, db) {
     if(err) throw err;
 });
@@ -27,6 +29,7 @@ app.use((req, res, next) => {
 
 app.use('/api/search', SearchRoutes);
 app.use('/api/site', SiteRoutes);
+app.use('/api/auth', AuthRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
