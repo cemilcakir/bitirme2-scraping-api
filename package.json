@@ -17,13 +17,13 @@
   },
   "homepage": "https://github.com/cemilcakir/bitirme2-scraping-api#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.3.0",
-    "morgan": "^1.9.1",
-    "request": "^2.88.0"
+    "morgan": "^1.9.1"
   }
 }

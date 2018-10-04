@@ -3,9 +3,11 @@ const mongoose = require('mongoose');
 
 exports.sites = (req, res, next) => {
     site.find()
-    .select('_id name baseUrl searchRoute')
     .exec()
     .then(sites => {
+        sites.forEach(site => {
+            site.__v = undefined
+        });
         res.status(200).json({
             sites
         });
@@ -21,6 +23,15 @@ exports.add = (req, res, next) => {
     const name = req.body.name;
     const baseUrl = req.body.baseUrl;
     const searchRoute = req.body.searchRoute;
+    const pageRoute = req.body.pageRoute;
+    const itemClass = req.body.itemClass;
+    const itemParentClass = req.body.itemParentClass;
+    const itemNameTag = req.body.itemNameTag;
+    const itemNameClass = req.body.itemNameClass;
+    const itemNameLocation = req.body.itemNameLocation;
+    const itemPriceTag = req.body.itemPriceTag;
+    const itemPriceClass = req.body.itemPriceClass;
+    const itemPriceLocation = req.body.itemPriceLocation;
 
     if(name && baseUrl && searchRoute){
         site.find({baseUrl: baseUrl, name: name})
@@ -36,7 +47,16 @@ exports.add = (req, res, next) => {
                     _id: mongoose.Types.ObjectId(),
                     name,
                     baseUrl,
-                    searchRoute
+                    searchRoute,
+                    pageRoute,
+                    itemClass,
+                    itemParentClass,
+                    itemNameTag,
+                    itemNameClass,
+                    itemNameLocation,
+                    itemPriceTag,
+                    itemPriceClass,
+                    itemPriceLocation
                 });
                 newSite.save()
                 .then(result => {
@@ -66,7 +86,7 @@ exports.add = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
-    if(req.body.user.email == "cemilcakir@outlook.com.tr"){
+    if(req.user.email == "cemilcakir@outlook.com.tr"){
         const id = req.params.siteId;
         site.remove({_id: id})
         .exec()
