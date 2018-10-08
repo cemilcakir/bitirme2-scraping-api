@@ -6,5 +6,6 @@ const SiteController = require('../Controllers/SiteController');
 router.get('/', auth, SiteController.sites);
 router.post('/', auth, SiteController.add);
 router.delete('/:siteId', auth, SiteController.delete);
+router.patch('/:siteId', auth, SiteController.patch)
 
 module.exports = router;
