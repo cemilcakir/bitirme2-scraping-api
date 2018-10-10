@@ -32,6 +32,9 @@ exports.add = (req, res, next) => {
     const itemPriceTag = req.body.itemPriceTag;
     const itemPriceClass = req.body.itemPriceClass;
     const itemPriceLocation = req.body.itemPriceLocation;
+    const itemImageClass = req.body.itemImageClass;
+    const itemImageTag = req.body.itemImageTag;
+    const itemImageAttr = req.body.itemImageAttr;
 
     if(name && baseUrl && searchRoute){
         site.find({baseUrl: baseUrl, name: name})
@@ -56,7 +59,10 @@ exports.add = (req, res, next) => {
                     itemNameLocation,
                     itemPriceTag,
                     itemPriceClass,
-                    itemPriceLocation
+                    itemPriceLocation,
+                    itemImageClass,
+                    itemImageTag,
+                    itemImageAttr
                 });
                 newSite.save()
                 .then(result => {

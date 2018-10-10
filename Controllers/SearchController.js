@@ -8,7 +8,7 @@ async function searchOnSites(searchQuery){
     const data = [];
     try{
         const sites =  await site.find();
-        for (const site of sites){
+        await Promise.all(sites.map(async (site) => {
             let url = encodeURI(site.baseUrl + site.searchRoute + searchQuery);
             const responseFromSite = await axios.get(url);
 
@@ -17,7 +17,6 @@ async function searchOnSites(searchQuery){
                 itemClass = " ." + site.itemClass;
             else
                 itemClass = "ul." + site.itemParentClass + " li";
-            console.log(itemClass);
 
             let itemName = site.itemNameTag + "." + site.itemNameClass;
             let itemPrice = site.itemPriceTag + "." + site.itemPriceClass;
@@ -55,7 +54,7 @@ async function searchOnSites(searchQuery){
 
                 data.push(dataObject)
             })
-        }
+        }));
         return data;
     }
     catch(error){
@@ -81,7 +80,4 @@ exports.search = (req, res, next) => {
             response: error
         })
     })
-    // res.status(200).json({
-    //         response: parsedQs.q
-    //     })
 }

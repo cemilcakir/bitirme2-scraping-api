@@ -6,12 +6,13 @@ const mongoose = require('mongoose');
 const SearchRoutes = require('./Routes/SearchRoutes');
 const SiteRoutes = require('./Routes/SiteRoutes');
 const AuthRoutes = require('./Routes/AuthRoutes');
+const values = require('./Values');
 
 mongoose.set('useCreateIndex', true);
-mongoose.connect("mongodb://root:root@localhost:27017/admin", { useNewUrlParser: true }, function (err, db) {
-    if(err) throw err;
-});
 
+mongoose.connect("mongodb://cemil:" + values.MONGO_ATLAS_PASSWORD + "@webscrapingdb-shard-00-00-vtccl.mongodb.net:27017,webscrapingdb-shard-00-01-vtccl.mongodb.net:27017,webscrapingdb-shard-00-02-vtccl.mongodb.net:27017/test?ssl=true&replicaSet=WebScrapingDB-shard-0&authSource=admin&retryWrites=true", { useNewUrlParser: true }, function (err, db) {
+        if(err) throw err;
+    });
 
 app.use(morgan('dev'));
 app.use(bodyParder.urlencoded({extended:false}));
