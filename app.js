@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const bodyParder = require('body-parser');
 const mongoose = require('mongoose');
 const SearchRoutes = require('./Routes/SearchRoutes');
+const DetailRoutes = require('./Routes/DetailRoutes');
 const SiteRoutes = require('./Routes/SiteRoutes');
 const AuthRoutes = require('./Routes/AuthRoutes');
 const values = require('./Values');
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/search', SearchRoutes);
+app.use('/api/details', DetailRoutes);
 app.use('/api/sites', SiteRoutes);
 app.use('/api/auth', AuthRoutes);
 

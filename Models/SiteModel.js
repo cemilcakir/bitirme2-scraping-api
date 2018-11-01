@@ -17,6 +17,7 @@ const siteSchema = mongoose.Schema({
     itemImageClass: { type: String, required: false },
     itemImageTag: { type: String, required: true },
     itemImageAttr: { type: String, required: true },
+    detailID: { type:mongoose.Schema.Types.ObjectId, ref:'Detail'}
 });
 
 module.exports = mongoose.model('Site', siteSchema);
