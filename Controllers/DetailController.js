@@ -52,8 +52,8 @@ exports.add = (req, res, next) => {
                 });
             })
             .catch(err => {
-                res.status(500).json({
-                    response: err
+                res.status(422).json({
+                    response: err.message
                 })
             });
         }
