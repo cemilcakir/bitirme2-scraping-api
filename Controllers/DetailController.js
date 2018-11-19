@@ -97,11 +97,9 @@ exports.patch = (req, res, next) => {
     detail.update({_id: id}, { $set: updateOps })
     .exec()
     .then(result => {
-        console.log(result);
         res.status(200).json(result);
     })
     .catch(err => {
-        console.log(err);
         res.status(500).json({error:err});
     });
 }

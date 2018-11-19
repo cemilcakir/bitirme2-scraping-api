@@ -5,6 +5,7 @@ const queryString = require('querystring');
 const url = require('url');
 const detail = require('../Models/DetailModel')
 var fs = require('fs')
+const LogFunctions = require('./LogFunctions')
 
 async function searchOnSites(searchQuery){
     const data = [];
@@ -120,6 +121,10 @@ exports.search = (req, res, next) => {
     let parsedUrl = url.parse(fullUrl);
     let parsedQs = queryString.parse(parsedUrl.query);
 
+    let ip = req.connection.remoteAddress
+    LogFunctions.saveLog(ip, parsedQs.q, "")
+    
+
     searchOnSites(parsedQs.q)
     .then(result => {
         res.status(200).json({
@@ -211,8 +216,6 @@ exports.getDetails = async (req, res, next) => {
                     title.push(det)
                 else
                     detail.push(det)
-
-                console.log(det)
             }
             detailTitle = title
             detailValue = detail
@@ -274,6 +277,9 @@ exports.getDetails = async (req, res, next) => {
             details.push(obj)
         }
     }
+
+    let ip = req.connection.remoteAddress
+    LogFunctions.saveLog(ip, detailUrl, name)
 
     res.status(200).json({
         name: name,

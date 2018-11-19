@@ -7,6 +7,7 @@ const SearchRoutes = require('./Routes/SearchRoutes');
 const DetailRoutes = require('./Routes/DetailRoutes');
 const SiteRoutes = require('./Routes/SiteRoutes');
 const AuthRoutes = require('./Routes/AuthRoutes');
+const LogRoutes = require('./Routes/LogRoutes');
 const values = require('./Values');
 
 mongoose.set('useCreateIndex', true);
@@ -33,6 +34,7 @@ app.use('/api/search', SearchRoutes);
 app.use('/api/details', DetailRoutes);
 app.use('/api/sites', SiteRoutes);
 app.use('/api/auth', AuthRoutes);
+app.use('/api/history', LogRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
