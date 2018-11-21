@@ -7,8 +7,9 @@ const detail = require('../Models/DetailModel')
 var fs = require('fs')
 const LogFunctions = require('./LogFunctions')
 
-async function searchOnSites(searchQuery){
+exports.searchOnSites = async (searchQuery) => {
     const data = [];
+    //return [{searchQuery},{searchQuery},{searchQuery}]
     try{
         const sites =  await site.find();
         await Promise.all(sites.map(async (site) => {
@@ -125,7 +126,7 @@ exports.search = (req, res, next) => {
     LogFunctions.saveLog(ip, parsedQs.q, "")
     
 
-    searchOnSites(parsedQs.q)
+    this.searchOnSites(parsedQs.q)
     .then(result => {
         res.status(200).json({
             size: result.length,
