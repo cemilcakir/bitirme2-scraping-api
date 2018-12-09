@@ -1,6 +1,13 @@
 const Log = require('../Models/LogModel')
 const SearchController = require('./SearchController')
 
+var groupBy = function(xs, key) {
+    return xs.reduce(function(rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
+
 exports.logs = async (req, res, next) => {
     try {
         const ip = req.connection.remoteAddress
@@ -25,6 +32,8 @@ exports.logs = async (req, res, next) => {
                     time: log.time
                 })
         }
+        searchQueries = groupBy(searchQueries, "query")
+        searchedProducts = groupBy(searchedProducts, "product")
 
         res.status(200).json({
             searchQueries,
@@ -64,7 +73,7 @@ exports.search = async (req, res, next) => {
     // }))
 
     var fs = require('fs');
-    tempResult = JSON.parse(await fs.readFileSync('result.json', 'utf8'))
+    tempResult = JSON.parse(await fs.readFileSync('./Response/LogResult.json', 'utf8'))
 
     for (var results of tempResult) {
         if (results.length) {

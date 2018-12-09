@@ -16,9 +16,12 @@ exports.searchOnSites = async (searchQuery) => {
             let url = encodeURI(site.baseUrl + site.searchRoute + searchQuery);
 
             if(site.name == "kitapyurdu") {
-                const responseFromSite = await axios.get(url);
+                //const responseFromSite = await axios.get(url);
+                //const $ = cheerio.load(responseFromSite.data);
+
+                var contents = fs.readFileSync('./Response/' + site.name, 'utf8');
                     
-                const $ = cheerio.load(responseFromSite.data);
+                const $ = cheerio.load(contents)
                 const table = $("#product-table")
                 const items = cheerio.load(table.html())
 
@@ -53,7 +56,7 @@ exports.searchOnSites = async (searchQuery) => {
                 }
             }
             else {
-                const responseFromSite = await axios.get(url);
+                //const responseFromSite = await axios.get(url);
 
                 var itemClass = ""
                 if(site.itemClass != "")
@@ -70,7 +73,11 @@ exports.searchOnSites = async (searchQuery) => {
                 if(site.itemPriceClass != "")
                     itemPrice += "." + site.itemPriceClass;
                     
-                const $ = cheerio.load(responseFromSite.data);
+                //const $ = cheerio.load(responseFromSite.data);
+
+                var contents = fs.readFileSync('./Response/' + site.name, 'utf8');
+                    
+                const $ = cheerio.load(contents)
     
                 $(itemClass).each((i, el) => {
                     const dataObject = {}
@@ -124,7 +131,6 @@ exports.search = (req, res, next) => {
 
     let ip = req.connection.remoteAddress
     LogFunctions.saveLog(ip, parsedQs.q, "")
-    
 
     this.searchOnSites(parsedQs.q)
     .then(result => {
@@ -148,8 +154,11 @@ exports.getDetails = async (req, res, next) => {
     const detailId = siteInfo.detailID
     const detailInfo = await detail.findById(detailId)
 
-    const responseFromSite = await axios.get(detailUrl)
-    const $ = cheerio.load(responseFromSite.data)
+    // const responseFromSite = await axios.get(detailUrl)
+    // const $ = cheerio.load(responseFromSite.data)
+
+    var contents = fs.readFileSync('./Response/details', 'utf8');
+    const $ = cheerio.load(contents)
     
     var nameQuery = detailInfo.nameTag
     if(detailInfo.nameClass != "")
