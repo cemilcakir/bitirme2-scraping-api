@@ -8,7 +8,7 @@ var groupBy = function(xs, key) {
     }, {});
   };
 
-exports.logs = async (req, res, next) => {
+exports.logs_by_ip = async (req, res, next) => {
     try {
         const ip = req.connection.remoteAddress
 
@@ -32,8 +32,8 @@ exports.logs = async (req, res, next) => {
                     time: log.time
                 })
         }
-        searchQueries = groupBy(searchQueries, "query")
-        searchedProducts = groupBy(searchedProducts, "product")
+        // searchQueries = groupBy(searchQueries, "query")
+        // searchedProducts = groupBy(searchedProducts, "product")
 
         res.status(200).json({
             searchQueries,
@@ -88,4 +88,79 @@ exports.search = async (req, res, next) => {
     res.status(200).json({
         data
     })
+}
+
+exports.logs_by_city = async (req, res, next) => {
+    try {
+        const city = req.params.city
+
+        const history = await Log.find({
+            location: city
+        })
+
+        var searchQueries = []
+        var searchedProducts = []
+
+        for (var log of history) {
+            if (log.product && log.product != "" && !searchedProducts.includes(log.product))
+                searchedProducts.push({
+                    product: log.product,
+                    time: log.time,
+                    link: log.searchQuery
+                })
+            else if (!log.searchQuery.includes("http") && !searchQueries.includes(log.product))
+                searchQueries.push({
+                    query: log.searchQuery,
+                    time: log.time
+                })
+        }
+        // searchQueries = groupBy(searchQueries, "query")
+        // searchedProducts = groupBy(searchedProducts, "product")
+
+        res.status(200).json({
+            searchQueries,
+            searchedProducts
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            error
+        })
+    }
+}
+
+exports.logs_all = async (req, res, next) => {
+    try {
+
+        const history = await Log.find()
+
+        var searchQueries = []
+        var searchedProducts = []
+
+        for (var log of history) {
+            if (log.product && log.product != "" && !searchedProducts.includes(log.product))
+                searchedProducts.push({
+                    product: log.product,
+                    time: log.time,
+                    link: log.searchQuery
+                })
+            else if (!log.searchQuery.includes("http") && !searchQueries.includes(log.product))
+                searchQueries.push({
+                    query: log.searchQuery,
+                    time: log.time
+                })
+        }
+        // searchQueries = groupBy(searchQueries, "query")
+        // searchedProducts = groupBy(searchedProducts, "product")
+
+        res.status(200).json({
+            searchQueries,
+            searchedProducts
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            error
+        })
+    }
 }

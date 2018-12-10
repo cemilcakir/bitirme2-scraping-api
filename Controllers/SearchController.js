@@ -156,7 +156,7 @@ exports.getDetails = async (req, res, next) => {
 
     // const responseFromSite = await axios.get(detailUrl)
     // const $ = cheerio.load(responseFromSite.data)
-
+    
     var contents = fs.readFileSync('./Response/details', 'utf8');
     const $ = cheerio.load(contents)
     

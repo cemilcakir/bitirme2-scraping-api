@@ -17,6 +17,10 @@ const logSchema = mongoose.Schema({
     product: {
         type: String,
         required: false
+    },
+    location: {
+        type: String,
+        required: false
     }
 });
 
