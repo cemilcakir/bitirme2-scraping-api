@@ -102,24 +102,43 @@ exports.logs_by_city = async (req, res, next) => {
         var searchedProducts = []
 
         for (var log of history) {
-            if (log.product && log.product != "" && !searchedProducts.includes(log.product))
+            if (log.product && log.product != "")
                 searchedProducts.push({
                     product: log.product,
                     time: log.time,
                     link: log.searchQuery
                 })
-            else if (!log.searchQuery.includes("http") && !searchQueries.includes(log.product))
+            else if (!log.searchQuery.includes("http"))
                 searchQueries.push({
                     query: log.searchQuery,
                     time: log.time
                 })
         }
-        // searchQueries = groupBy(searchQueries, "query")
-        // searchedProducts = groupBy(searchedProducts, "product")
+        searchQueries = groupBy(searchQueries, "query")
+        searchedProducts = groupBy(searchedProducts, "product")
+
+        var queries = []
+        var products = []
+
+        Object.keys(searchQueries).forEach(function(key) {
+            var val = searchQueries[key];
+            queries.push({
+                query: val[0].query,
+                count: val.length
+            })
+        });
+
+        Object.keys(searchedProducts).forEach(function(key) {
+            var val = searchedProducts[key];
+            products.push({
+                product: val[0].product,
+                count: val.length
+            })
+        });
 
         res.status(200).json({
-            searchQueries,
-            searchedProducts
+            queries,
+            products
         })
     } catch (error) {
         console.log(error)
@@ -163,4 +182,22 @@ exports.logs_all = async (req, res, next) => {
             error
         })
     }
+}
+
+exports.get_all_cities = async (req, res, next) => {
+    const cities = await Log.distinct("location")
+    var requestCounts = []
+
+    for (var city of cities) {
+        let count = await Log.find({
+            location: city
+        }).count()
+
+        requestCounts.push(count)
+    }
+
+    res.status(200).json({
+        cities,
+        requestCounts
+    })
 }
