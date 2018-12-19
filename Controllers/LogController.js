@@ -201,3 +201,82 @@ exports.get_all_cities = async (req, res, next) => {
         requestCounts
     })
 }
+
+exports.get_all = async (req, res, next) => {
+    var queries = await Log.aggregate(
+        [
+           {
+             $group : {
+                _id : "$searchQuery",
+                count: { $sum: 1 }
+             }
+           }
+        ]
+    )
+
+    queries.sort((a, b) => a.count > b.count ? -1 : b.count > a.count ? 1 : 0);
+    
+    var products = await Log.aggregate(
+        [
+           {
+             $group : {
+                _id : "$product",
+                count: { $sum: 1 }
+             }
+           }
+        ]
+    )
+
+    products.sort((a, b) => a.count > b.count ? -1 : b.count > a.count ? 1 : 0);
+
+    res.status(200).json({
+        topQueries: queries.splice(0, 5),
+        topProducts: products.splice(0,5)
+    })
+}
+
+exports.get_top_queries_by_month = async (req, res, next) => {
+    const month = req.params.month
+
+    var queries = await Log.aggregate(
+        [{
+            $group: {
+                _id: { query: "$searchQuery", product: "$product" },
+                time: {
+                    $push: {
+                        $month: "$time"
+                    }
+                },
+                count: {
+                    $sum: 1
+                }
+            }
+        }]
+    )
+
+    var queriesByMonth = []
+    for (var query of queries) {
+        if (query.time[0] == month)
+            queriesByMonth.push({
+                query: (query._id.query.includes("://")) ? query._id.product : query._id.query,
+                count: query.count
+            })
+    }
+
+    queriesByMonth.sort((a, b) => a.count > b.count ? -1 : b.count > a.count ? 1 : 0);
+
+    var tops = queriesByMonth.splice(0, 5)
+
+    var labels = []
+    var data = []
+
+    tops.forEach(q => {
+        labels.push(q.query)
+        data.push(q.count)
+    })
+
+    res.status(200).json({
+        labels,
+        data
+    })
+}
