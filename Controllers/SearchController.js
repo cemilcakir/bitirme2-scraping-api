@@ -35,7 +35,7 @@ exports.searchOnSites = async (searchQuery) => {
                 })
 
                 items(".price").each((i, el) => {
-                    price.push($(el).text())
+                    price.push($(el).text().split("K")[0].trim().split("TL")[0].trim())
                 })
 
                 items(".image").each((i, el) => {
@@ -106,7 +106,7 @@ exports.searchOnSites = async (searchQuery) => {
                         detailLink = encodeURI($(el).find("a").attr('href'));
         
                     dataObject.productName = itemNameText.replace(/\n/g, '').trim();
-                    dataObject.productPrice = itemPriceText.replace(/\n/g, '').trim().replace(/                /g, ' ');
+                    dataObject.productPrice = itemPriceText.replace(/\n/g, '').trim().replace(/                /g, ' ').split("K")[0].trim().split("TL")[0].trim();
                     dataObject.productImage = itemImageLink;
                     dataObject.productLink = detailLink;
                     dataObject.siteName = site.name;
